@@ -1,0 +1,15 @@
+C:\Users\MAQ\Desktop\CSharpFundamentalsAssignment\bin\Debug\net7.0\CSharpFundamentalsAssignment.exe
+C:\Users\MAQ\Desktop\CSharpFundamentalsAssignment\bin\Debug\net7.0\CSharpFundamentalsAssignment.deps.json
+C:\Users\MAQ\Desktop\CSharpFundamentalsAssignment\bin\Debug\net7.0\CSharpFundamentalsAssignment.runtimeconfig.json
+C:\Users\MAQ\Desktop\CSharpFundamentalsAssignment\bin\Debug\net7.0\CSharpFundamentalsAssignment.dll
+C:\Users\MAQ\Desktop\CSharpFundamentalsAssignment\bin\Debug\net7.0\CSharpFundamentalsAssignment.pdb
+C:\Users\MAQ\Desktop\CSharpFundamentalsAssignment\obj\Debug\net7.0\CSharpFundamentalsAssignment.csproj.AssemblyReference.cache
+C:\Users\MAQ\Desktop\CSharpFundamentalsAssignment\obj\Debug\net7.0\CSharpFundamentalsAssignment.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\MAQ\Desktop\CSharpFundamentalsAssignment\obj\Debug\net7.0\CSharpFundamentalsAssignment.AssemblyInfoInputs.cache
+C:\Users\MAQ\Desktop\CSharpFundamentalsAssignment\obj\Debug\net7.0\CSharpFundamentalsAssignment.AssemblyInfo.cs
+C:\Users\MAQ\Desktop\CSharpFundamentalsAssignment\obj\Debug\net7.0\CSharpFundamentalsAssignment.csproj.CoreCompileInputs.cache
+C:\Users\MAQ\Desktop\CSharpFundamentalsAssignment\obj\Debug\net7.0\CSharpFundamentalsAssignment.dll
+C:\Users\MAQ\Desktop\CSharpFundamentalsAssignment\obj\Debug\net7.0\refint\CSharpFundamentalsAssignment.dll
+C:\Users\MAQ\Desktop\CSharpFundamentalsAssignment\obj\Debug\net7.0\CSharpFundamentalsAssignment.pdb
+C:\Users\MAQ\Desktop\CSharpFundamentalsAssignment\obj\Debug\net7.0\CSharpFundamentalsAssignment.genruntimeconfig.cache
+C:\Users\MAQ\Desktop\CSharpFundamentalsAssignment\obj\Debug\net7.0\ref\CSharpFundamentalsAssignment.dll
