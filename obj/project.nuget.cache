@@ -1,8 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "t6RPPIW3J/lkdophJblBY+knzrhPy5UPXtXdLDplbYNKkDi7wyUdYUQDPrjdTqTPkX/Vaa9tKWesWDRPteJWog==",
+  "dgSpecHash": "RfsN7bIJZWRG5YwRzkFtCTxXx1RPBLI7a0YgpaARF6KcwqDlQUBPZ5NP37wYzIW2JwCwJ2Xmkf8RXbtvunwZWg==",
   "success": true,
   "projectFilePath": "C:\\Users\\MAQ\\Desktop\\CSharpFundamentalsAssignment\\CSharpFundamentalsAssignment.csproj",
-  "expectedPackageFiles": [],
+  "expectedPackageFiles": [
+    "C:\\Users\\MAQ\\.nuget\\packages\\newtonsoft.json\\13.0.3\\newtonsoft.json.13.0.3.nupkg.sha512"
+  ],
   "logs": []
 }

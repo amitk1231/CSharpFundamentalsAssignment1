@@ -13,3 +13,5 @@ C:\Users\MAQ\Desktop\CSharpFundamentalsAssignment\obj\Debug\net7.0\refint\CSharp
 C:\Users\MAQ\Desktop\CSharpFundamentalsAssignment\obj\Debug\net7.0\CSharpFundamentalsAssignment.pdb
 C:\Users\MAQ\Desktop\CSharpFundamentalsAssignment\obj\Debug\net7.0\CSharpFundamentalsAssignment.genruntimeconfig.cache
 C:\Users\MAQ\Desktop\CSharpFundamentalsAssignment\obj\Debug\net7.0\ref\CSharpFundamentalsAssignment.dll
+C:\Users\MAQ\Desktop\CSharpFundamentalsAssignment\bin\Debug\net7.0\Newtonsoft.Json.dll
+C:\Users\MAQ\Desktop\CSharpFundamentalsAssignment\obj\Debug\net7.0\CSharpFundamentalsAssignment.csproj.CopyComplete
