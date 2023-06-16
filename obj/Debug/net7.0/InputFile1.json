@@ -1,0 +1,27 @@
+﻿[
+  {
+    "Budget": 100,
+    "Role": "SE1",
+    "Reputation": 1
+  },
+  {
+    "Budget": 150,
+    "Role": "SE2",
+    "Reputation": 2
+  },
+  {
+    "Budget": 400,
+    "Role": "SSE1",
+    "Reputation": 5
+  },
+  {
+    "Budget": 500,
+    "Role": "SSE2",
+    "Reputation": 6
+  },
+  {
+    "Budget": 700,
+    "Role": "Lead",
+    "Reputation": 9
+  }
+] 

@@ -5,9 +5,9 @@ using Newtonsoft.Json;
 
 namespace ResourceAllocationApp
 {
-    public class Resource
+    public class BudgetInfo
     {
-        public string Role { get; set; } 
+        public string Role { get; set; }
         public int Budget { get; set; }
         public int Reputation { get; set; }
     }
@@ -28,12 +28,18 @@ namespace ResourceAllocationApp
     {
         static void Main()
         {
+            var dict = new Dictionary<string, int>();
+            var obj = new { };
+            dict.Clear();
+            // dict.Add("One", 1);
+            // Console.WriteLine(dict["One"]);
+            // Console.WriteLine(dict.Keys);
             // Read input files
             string resourceFile = "InputFile1.json";
             string requiredReputationFile = "InputFile2.json";
             string outputFile = "OutputFile1.json";
 
-            List<Resource> resources = ReadResourceData(resourceFile);
+            List<BudgetInfo> resources = ReadResourceData(resourceFile);
             int requiredReputation = ReadRequiredReputation(requiredReputationFile);
 
             if (resources != null && requiredReputation >= 0)
@@ -58,12 +64,13 @@ namespace ResourceAllocationApp
             Console.ReadLine();
         }
 
-        static List<Resource>? ReadResourceData(string resourceFile)
+        static List<BudgetInfo>? ReadResourceData(string resourceFile)
         {
             try
             {
                 string resourceJson = File.ReadAllText(resourceFile);
-                List<Resource>? resources = JsonConvert.DeserializeObject<List<Resource>>(resourceJson);
+                List<BudgetInfo>? resources = JsonConvert.DeserializeObject<List<BudgetInfo>>(resourceJson);
+                Console.WriteLine(resources);
                 return resources;
             }
             catch (Exception ex)
@@ -101,7 +108,7 @@ namespace ResourceAllocationApp
             }
         }
 
-        static OutputData AllocateResources(List<Resource> resources, int requiredReputation)
+        static OutputData AllocateResources(List<BudgetInfo> resources, int requiredReputation)
         {
             // Sort resources by budget in ascending order
             resources.Sort((r1, r2) => r1.Budget.CompareTo(r2.Budget));
@@ -162,9 +169,10 @@ namespace ResourceAllocationApp
             // Create the output data object
             OutputData outputData = new()
             {
-                ResourceAllocation = bestAllocation,
-                TotalBudget = minBudget,
-                TotalHeadCount = minHeadCount
+                dict.Add("", ),
+                // ResourceAllocation = bestAllocation,
+                // TotalBudget = minBudget,
+                // TotalHeadCount = minHeadCount
             };
 
             return outputData;
