@@ -1,162 +1,174 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using Newtonsoft.Json;
 
-class Program
+namespace ResourceAllocationApp
 {
-    static void Main(string[] args)
+    public class Resource
     {
-        string inputFilePath = "InputFile1.json";
-        string outputFilePath = "OutputFile1.json";
-        string input2FilePath = "InputFile2.json";
+        public string Role { get; set; }
+        public int Budget { get; set; }
+        public int Reputation { get; set; }
+    }
 
-        // Read input files
-        List<ResourceData> resources = ReadResourceData(inputFilePath);
-        int requiredReputation = ReadRequiredReputation(input2FilePath);
+    public class InputData
+    {
+        public int RequiredReputation { get; set; }
+    }
 
-        // Allocate resources
-        List<AllocationResult> allocations = AllocateResources(resources, requiredReputation);
+    public class OutputData
+    {
+        public Dictionary<string, int> ResourceAllocation { get; set; } = default!;
+        public int TotalBudget { get; set; }
+        public int TotalHeadCount { get; set; }
+    }
 
-        // Determine the optimal allocation(s)
-        AllocationResult optimalAllocation = GetOptimalAllocation(allocations);
-
-        // Prepare the output data
-        var outputData = new
+    class Program
+    {
+        static void Main(string[] args)
         {
-            SE1 = optimalAllocation.GetCountForResource("SE1"),
-            SE2 = optimalAllocation.GetCountForResource("SE2"),
-            SSE1 = optimalAllocation.GetCountForResource("SSE1"),
-            SSE2 = optimalAllocation.GetCountForResource("SSE2"),
-            Lead = optimalAllocation.GetCountForResource("Lead"),
-            totalBudget = optimalAllocation.Budget,
-            totalHeadCount = optimalAllocation.GetTotalCount()
-        };
+            // Read input files
+            string resourceFile = "InputFile1.json";
+            string requiredReputationFile = "InputFile2.json";
+            string outputFile = "OutputFile1.json";
 
-        // Write output to a file
-        WriteOutputData(outputFilePath, outputData);
+            List<Resource> resources = ReadResourceData(resourceFile);
+            int requiredReputation = ReadRequiredReputation(requiredReputationFile);
 
-        Console.WriteLine("Resource allocation completed. Output written to OutputFile1.json.");
-    }
-
-    static List<ResourceData> ReadResourceData(string filePath)
-    {
-        string jsonData = File.ReadAllText(filePath);
-        return JsonConvert.DeserializeObject<List<ResourceData>>(jsonData);
-    }
-
-    static int ReadRequiredReputation(string filePath)
-    {
-        string jsonData = File.ReadAllText(filePath);
-        var input = JsonConvert.DeserializeObject<Dictionary<string, int>>(jsonData);
-        return input["RequiredReputation"];
-    }
-
-    static List<AllocationResult> AllocateResources(List<ResourceData> resources, int requiredReputation)
-    {
-        var allocations = new List<AllocationResult>();
-        var memo = new Dictionary<string, AllocationResult>(); // Memoization dictionary
-        Allocate(resources, requiredReputation, new List<ResourceData>(), allocations, memo);
-        return allocations;
-    }
-
-    static void Allocate(List<ResourceData> resources, int remainingReputation, List<ResourceData> currentAllocation, List<AllocationResult> allocations, Dictionary<string, AllocationResult> memo)
-    {
-        if (remainingReputation == 0)
-        {
-            // Add current allocation to the list of allocations
-            var allocationResult = new AllocationResult();
-            allocationResult.AddRange(currentAllocation);
-            allocations.Add(allocationResult);
-            return;
-        }
-
-        if (remainingReputation < 0 || resources.Count == 0)
-            return;
-
-        var memoKey = $"{remainingReputation}-{resources.Count}";
-        if (memo.ContainsKey(memoKey))
-        {
-            // If the result is already memoized, use it directly
-            var memoizedAllocation = memo[memoKey];
-            currentAllocation.AddRange(memoizedAllocation);
-            allocations.Add(memoizedAllocation);
-            return;
-        }
-
-        // Try allocating the current resource and continue allocation recursively
-        var currentResource = resources[0];
-        currentAllocation.Add(currentResource);
-        Allocate(resources, remainingReputation - currentResource.Reputation, currentAllocation, allocations, memo);
-
-        // Try allocating without the current resource and continue allocation recursively
-        currentAllocation.Remove(currentResource);
-        Allocate(resources.Skip(1).ToList(), remainingReputation, currentAllocation, allocations, memo);
-
-        // Store the result in the memo dictionary
-        var newAllocation = new AllocationResult();
-        newAllocation.AddRange(currentAllocation);
-        memo[memoKey] = newAllocation;
-    }
-
-    static AllocationResult GetOptimalAllocation(List<AllocationResult> allocations)
-    {
-        int minBudget = int.MaxValue;
-        int minHeadCount = int.MaxValue;
-        AllocationResult optimalAllocation = null;
-
-        foreach (var allocation in allocations)
-        {
-            int budget = allocation.Sum(a => a.Budget);
-            int headCount = allocation.GetTotalCount();
-
-            if (budget < minBudget || (budget == minBudget && headCount < minHeadCount))
+            if (resources != null && requiredReputation >= 0)
             {
-                minBudget = budget;
-                minHeadCount = headCount;
-                optimalAllocation = allocation;
+                OutputData outputData = AllocateResources(resources, requiredReputation);
+                if (outputData != null)
+                {
+                    // Write output to a JSON file
+                    WriteOutputData(outputData, outputFile);
+                    Console.WriteLine("Resource allocation completed. Output written to OutputFile1.json");
+                }
+                else
+                {
+                    Console.WriteLine("Failed to allocate resources.");
+                }
+            }
+            else
+            {
+                Console.WriteLine("Failed to read input data.");
+            }
+            Console.ReadLine();
+        }
+        static List<Resource>? ReadResourceData(string resourceFile)
+        {
+            try
+            {
+                string resourceJson = File.ReadAllText(resourceFile);
+                List<Resource>? resources = JsonConvert.DeserializeObject<List<Resource>>(resourceJson);
+                return resources;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error reading resource data: " + ex.Message);
+                return null;
+            }
+        }
+        static int ReadRequiredReputation(string requiredReputationFile)
+        {
+            try
+            {
+                string reputationJson = File.ReadAllText(requiredReputationFile);
+                InputData inputData = JsonConvert.DeserializeObject<InputData>(reputationJson)!;
+                return inputData.RequiredReputation;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error reading required reputation: " + ex.Message);
+                return -1;
             }
         }
 
-        return optimalAllocation;
-    }
+        static void WriteOutputData(OutputData outputData, string outputFile)
+        {
+            try
+            {
+                string outputJson = JsonConvert.SerializeObject(outputData, Formatting.Indented);
+                File.WriteAllText(outputFile, outputJson);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error writing output file: " + ex.Message);
+            }
+        }
+        static OutputData AllocateResources(List<Resource> resources, int requiredReputation)
+        {
+            // Sort resources by budget in ascending order
+            resources.Sort((r1, r2) => r1.Budget.CompareTo(r2.Budget));
 
-    static void WriteOutputData(string filePath, object outputData)
-    {
-        string jsonData = JsonConvert.SerializeObject(outputData, Formatting.Indented);
-        File.WriteAllText(filePath, jsonData);
-    }
-}
+            // Initialize variables for best allocation
+            int minBudget = int.MaxValue;
+            int minHeadCount = int.MaxValue;
+            Dictionary<string, int> bestAllocation = null!;
+            // Iterate through all possible combinations of resources
+            int[] allocation = new int[resources.Count];
+            int currentHeadCount = 0;
 
-class ResourceData
-{
-    public string Role { get; set; }
-    public int Budget { get; set; }
-    public int Reputation { get; set; }
-}
+            while (true)
+            {
+                // Calculate the total budget and reputation of the current allocation
+                int totalBudget = 0;
+                int totalReputation = 0;
+                for (int i = 0; i < resources.Count; i++)
+                {
+                    totalBudget += allocation[i] * resources[i].Budget;
+                    totalReputation += allocation[i] * resources[i].Reputation;
+                }
 
-class AllocationResult : List<ResourceData>
-{
-    public int Budget => this.Sum(a => a.Budget);
+                // Check if the current allocation meets the required reputation
+                if (totalReputation == requiredReputation)
+                {
+                    // Check if the current allocation has the minimum budget and head count
+                    if (totalBudget < minBudget || (totalBudget == minBudget && currentHeadCount < minHeadCount))
+                    {
+                        minBudget = totalBudget;
+                        minHeadCount = currentHeadCount;
+                        bestAllocation = new Dictionary<string, int>();
+                        for (int i = 0; i < resources.Count; i++)
+                        {
+                            if (allocation[i] > 0)
+                                bestAllocation[resources[i].Role] = allocation[i];
+                            else
+                                bestAllocation[resources[i].Role] = 0;
+                        }
+                    }
+                }
 
-    public int GetCountForResource(string role)
-    {
-        return this.Count(a => a.Role == role);
-    }
+                // Generate the next allocation combination
+                int index = resources.Count - 1;
+                while (index >= 0 && allocation[index] >= 2)
+                {
+                    currentHeadCount -= allocation[index];
+                    allocation[index] = 0;
+                    index--;
+                }
+                if (index < 0)
+                    break;
+                allocation[index]++;
+                currentHeadCount++;
+            }
 
-    public int GetTotalCount()
-    {
-        // var counts = this.GroupBy(a => a.Role)
-        //                  .Select(g => new { Role = g.Key, Count = g.Count() })
-        //                  .ToDictionary(x => x.Role, x => x.Count);
+            
+            // Create the output data object
+            OutputData outputData = new()
+            {
+                ResourceAllocation = bestAllocation,
+                TotalBudget = minBudget,
+                TotalHeadCount = minHeadCount
+            };
 
-        // int totalCount = 0;
-        // foreach (var resource in counts.Keys)
-        // {
-        //     totalCount += GetCountForResource(resource);
-        // }
+            OutputData outputData1= new()
+            {
+         
+            };
 
-        return this.Count;
+            return outputData;
+        }
     }
 }

@@ -1,9 +1,11 @@
 {
-  "SE1": 8,
-  "SE2": 0,
-  "SSE1": 0,
-  "SSE2": 0,
-  "Lead": 0,
-  "totalBudget": 800,
-  "totalHeadCount": 8
+  "ResourceAllocation": {
+    "SE1": 0,
+    "SE2": 0,
+    "SSE1": 2,
+    "SSE2": 0,
+    "Lead": 0
+  },
+  "TotalBudget": 800,
+  "TotalHeadCount": 2
 }
