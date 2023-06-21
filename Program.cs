@@ -5,9 +5,9 @@ using Newtonsoft.Json;
 
 namespace ResourceAllocationApp
 {
-    public class Resource
+    public class BudgetInfo
     {
-        public string Role { get; set; }
+        public string? Role { get; set; }
         public int Budget { get; set; }
         public int Reputation { get; set; }
     }
@@ -19,21 +19,25 @@ namespace ResourceAllocationApp
 
     public class OutputData
     {
-        public Dictionary<string, int> ResourceAllocation { get; set; } = default!;
-        public int TotalBudget { get; set; }
-        public int TotalHeadCount { get; set; }
+        public string? SE1 { get; set; }
+        public string? SE2 { get; set; }
+        public string? SSE1 { get; set; }
+        public string? SSE2 { get; set; }
+        public string? Lead { get; set; }
+        public string? TotalBudget { get; set; }
+        public string? TotalHeadCount { get; set; }
     }
 
     class Program
     {
-        static void Main(string[] args)
+        static void Main()
         {
             // Read input files
             string resourceFile = "InputFile1.json";
             string requiredReputationFile = "InputFile2.json";
             string outputFile = "OutputFile1.json";
 
-            List<Resource> resources = ReadResourceData(resourceFile);
+            List<BudgetInfo>? resources = ReadResourceData(resourceFile);
             int requiredReputation = ReadRequiredReputation(requiredReputationFile);
 
             if (resources != null && requiredReputation >= 0)
@@ -43,7 +47,8 @@ namespace ResourceAllocationApp
                 {
                     // Write output to a JSON file
                     WriteOutputData(outputData, outputFile);
-                    Console.WriteLine("Resource allocation completed. Output written to OutputFile1.json");
+                    // Console.WriteLine("Resource allocation completed. Output written to OutputFile1.json");
+                    // Console.ReadKey();
                 }
                 else
                 {
@@ -54,14 +59,17 @@ namespace ResourceAllocationApp
             {
                 Console.WriteLine("Failed to read input data.");
             }
+
             Console.ReadLine();
         }
-        static List<Resource>? ReadResourceData(string resourceFile)
+
+        static List<BudgetInfo>? ReadResourceData(string resourceFile)
         {
             try
             {
                 string resourceJson = File.ReadAllText(resourceFile);
-                List<Resource>? resources = JsonConvert.DeserializeObject<List<Resource>>(resourceJson);
+                List<BudgetInfo>? resources = JsonConvert.DeserializeObject<List<BudgetInfo>>(resourceJson);
+                // Console.WriteLine(resources);
                 return resources;
             }
             catch (Exception ex)
@@ -70,6 +78,7 @@ namespace ResourceAllocationApp
                 return null;
             }
         }
+
         static int ReadRequiredReputation(string requiredReputationFile)
         {
             try
@@ -90,14 +99,19 @@ namespace ResourceAllocationApp
             try
             {
                 string outputJson = JsonConvert.SerializeObject(outputData, Formatting.Indented);
+
+                //Determine the output file path
+                // string outputFilePath = Path.Combine(Directory.GetCurrentDirectory(), "OutputFile1.json");
                 File.WriteAllText(outputFile, outputJson);
+                // File.WriteAllText("OutputFile1.json", outputJson);
             }
             catch (Exception ex)
             {
                 Console.WriteLine("Error writing output file: " + ex.Message);
             }
         }
-        static OutputData AllocateResources(List<Resource> resources, int requiredReputation)
+
+        static OutputData AllocateResources(List<BudgetInfo> resources, int requiredReputation)
         {
             // Sort resources by budget in ascending order
             resources.Sort((r1, r2) => r1.Budget.CompareTo(r2.Budget));
@@ -106,6 +120,7 @@ namespace ResourceAllocationApp
             int minBudget = int.MaxValue;
             int minHeadCount = int.MaxValue;
             Dictionary<string, int> bestAllocation = null!;
+
             // Iterate through all possible combinations of resources
             int[] allocation = new int[resources.Count];
             int currentHeadCount = 0;
@@ -154,18 +169,17 @@ namespace ResourceAllocationApp
                 currentHeadCount++;
             }
 
-            
             // Create the output data object
             OutputData outputData = new()
             {
-                ResourceAllocation = bestAllocation,
-                TotalBudget = minBudget,
-                TotalHeadCount = minHeadCount
-            };
-
-            OutputData outputData1= new()
-            {
-         
+                // ResourceAllocation = bestAllocation,
+                SE1 = bestAllocation.GetValueOrDefault("SE1").ToString(),
+                SE2 = bestAllocation.GetValueOrDefault("SE2").ToString(),
+                SSE1 = bestAllocation.GetValueOrDefault("SSE1").ToString(),
+                SSE2 = bestAllocation.GetValueOrDefault("SSE2").ToString(),
+                Lead = bestAllocation.GetValueOrDefault("Lead").ToString(),
+                TotalBudget = minBudget.ToString(),
+                TotalHeadCount = minHeadCount.ToString()
             };
 
             return outputData;
